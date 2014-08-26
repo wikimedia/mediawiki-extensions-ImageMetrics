@@ -30,7 +30,7 @@ $wgMessagesDirs['ImageMetrics'] = __DIR__ . '/i18n';
 
 $wgExtensionFunctions[] = function () {
 	global $wgEventLoggingSchemas;
-	$wgEventLoggingSchemas['ImageMetricsLoadingTime'] = 9381231;
+	$wgEventLoggingSchemas['ImageMetricsLoadingTime'] = 9673571;
 };
 
 
@@ -41,7 +41,14 @@ $wgResourceModules += array(
 		'remoteExtPath' => 'ImageMetrics/resources',
 		'dependencies'  => 'schema.ImageMetricsLoadingTime',
 		'targets'       => array( 'desktop', 'mobile' ),
-	)
+	),
+	'ext.imageMetrics.head' => array(
+		'scripts'       => 'ext.imageMetrics.head.js',
+		'localBasePath' => __DIR__ . '/resources',
+		'remoteExtPath' => 'ImageMetrics/resources',
+		'targets'       => array( 'desktop', 'mobile' ),
+	    'position'      => 'top',
+	),
 );
 
 /**
@@ -51,7 +58,7 @@ $wgResourceModules += array(
  */
 $wgHooks['BeforePageDisplay'][] = function ( &$out, &$skin ) {
 	if ( $out->getTitle()->inNamespace( NS_FILE ) && Action::getActionName( $out->getContext() ) === 'view' ) {
-		$out->addModules( 'ext.imageMetrics' );
+		$out->addModules( array( 'ext.imageMetrics.head', 'ext.imageMetrics' ) );
 	}
 	return true;
 };

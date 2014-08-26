@@ -101,6 +101,14 @@
 	};
 
 	/**
+	 * Adds timing data from the image onload event.
+	 * @param {Object} data
+	 */
+	ImageMetrics.prototype.addOnloadData = function ( data ) {
+		data.fallbackFullLoadingTime = mw.imageMetricsLoadTime;
+	};
+
+	/**
 	 * Adds navigation type (reload, back etc) to the log data from the NavigationTiming API.
 	 * @param {Object} data
 	 */
@@ -169,7 +177,8 @@
 		$file = $( '#file' ).find( 'img' ); // more efficient than '#file img'
 
 		this.addMediaWikiData( data, $file );
-		this.addNavigationTimingData( data, $file );
+		this.addOnloadData( data );
+		this.addNavigationTimingData( data );
 		this.addResourceTimingData( data, $file );
 
 		this.eventLog.logEvent( 'ImageMetricsLoadingTime', data );
