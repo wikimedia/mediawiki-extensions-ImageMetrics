@@ -75,19 +75,6 @@
 	};
 
 	/**
-	 * Makes a random decision (based on the sampling factor configuration setting) whether the current
-	 * request should be logged.
-	 * @return {boolean}
-	 */
-	ImageMetrics.prototype.isInSample = function () {
-		var factor = this.mwConfig.get( 'wgImageMetricsSamplingFactor', false );
-		if ( !$.isNumeric( factor ) || factor < 1 ) {
-			return false;
-		}
-		return Math.floor( Math.random() * factor ) === 0;
-	};
-
-	/**
 	 * Adds information provided by MediaWiki.
 	 * @param {Object} data
 	 * @param {jQuery} $file jQuery object containing the img element
@@ -166,9 +153,6 @@
 		var $file,
 			data = {};
 
-		if ( !this.isInSample() || !this.eventLog ) {
-			return;
-		}
 		data.samplingFactor = this.mwConfig.get( 'wgImageMetricsSamplingFactor' );
 
 		data.isHttps = this.location.protocol === 'https:';
@@ -185,5 +169,4 @@
 	};
 
 	mw.ImageMetrics = ImageMetrics;
-	ImageMetrics.install();
 } ( mediaWiki, jQuery ) );

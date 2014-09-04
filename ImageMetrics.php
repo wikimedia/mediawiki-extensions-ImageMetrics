@@ -49,6 +49,12 @@ $wgResourceModules += array(
 		'targets'       => array( 'desktop', 'mobile' ),
 	    'position'      => 'top',
 	),
+	'ext.imageMetrics.loader' => array(
+		'scripts'       => 'ext.imageMetrics.loader.js',
+		'localBasePath' => __DIR__ . '/resources',
+		'remoteExtPath' => 'ImageMetrics/resources',
+		'targets'       => array( 'desktop', 'mobile' ),
+	),
 );
 
 /**
@@ -58,7 +64,7 @@ $wgResourceModules += array(
  */
 $wgHooks['BeforePageDisplay'][] = function ( &$out, &$skin ) {
 	if ( $out->getTitle()->inNamespace( NS_FILE ) && Action::getActionName( $out->getContext() ) === 'view' ) {
-		$out->addModules( array( 'ext.imageMetrics.head', 'ext.imageMetrics' ) );
+		$out->addModules( array( 'ext.imageMetrics.head', 'ext.imageMetrics.loader' ) );
 	}
 	return true;
 };
