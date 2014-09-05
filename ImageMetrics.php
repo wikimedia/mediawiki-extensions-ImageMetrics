@@ -89,6 +89,9 @@ $wgHooks['ResourceLoaderTestModules'][] = function ( array &$testModules, Resour
 		'scripts' => array(
 			'tests/qunit/ext.imageMetrics.test.js',
 		),
+		'dependencies' => array(
+			'ext.imageMetrics',
+		),
 		'localBasePath' => __DIR__,
 		'remoteExtPath' => 'ImageMetrics',
 	);

@@ -80,9 +80,11 @@
 	 * @param {jQuery} $file jQuery object containing the img element
 	 */
 	ImageMetrics.prototype.addMediaWikiData = function ( data, $file ) {
-		data.fileType = $file.attr( 'alt' ).split( '.' ).pop();
 		if ( this.geo && typeof this.geo.country === 'string' ) {
 			data.country = this.geo.country;
+		}
+		if ( $file.attr( 'alt' ) ) {
+			data.fileType = $file.attr( 'alt' ).split( '.' ).pop();
 		}
 		data.isAnon = this.mwConfig.get( 'wgUserId' ) === null;
 	};
