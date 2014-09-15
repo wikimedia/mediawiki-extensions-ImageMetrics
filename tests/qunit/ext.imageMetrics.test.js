@@ -20,30 +20,7 @@
 		assert.ok( imageMetrics, 'Object created' );
 	} );
 
-	QUnit.test( 'Sampling', 4, function ( assert ) {
-		var options = {},
-			imageMetrics = createImageMetrics( this.sandbox, options );
-		imageMetrics.log();
-		assert.ok( !options.logEvent.called, 'Events not logged when sampling not set' );
-
-		options.config = { wgImageMetricsSamplingFactor: false };
-		imageMetrics = createImageMetrics( this.sandbox, options );
-		imageMetrics.log();
-		assert.ok( !options.logEvent.called, 'Events not logged when sampling set to false' );
-
-		options.config = { wgImageMetricsSamplingFactor: 0 };
-		imageMetrics = createImageMetrics( this.sandbox, options );
-		imageMetrics.log();
-		assert.ok( !options.logEvent.called, 'Events not logged when sampling set to 0' );
-
-		options.config = { wgImageMetricsSamplingFactor: 1 };
-		imageMetrics = createImageMetrics( this.sandbox, options );
-		$( '#qunit-fixture' ).append( '<div id="file"><img alt="Foo.jpg" /></div>' );
-		imageMetrics.log();
-		assert.ok( options.logEvent.called, 'Events logged when sampling set to 1' );
-	} );
-
-	QUnit.test( 'Minimal logging scenario', 10, function ( assert ) {
+	QUnit.test( 'Minimal logging scenario', 12, function ( assert ) {
 		var data,
 			options = {
 				config: { wgImageMetricsSamplingFactor: 1 }
@@ -102,10 +79,10 @@
 		imageMetrics.log();
 		data = options.logEvent.firstCall.args[1];
 
-		assert.strictEqual( data.navigationType, 'navigation', 'navigationType is logged correctly' );
+		assert.strictEqual( data.navigationType, 'navigate', 'navigationType is logged correctly' );
 	} );
 
-	QUnit.test( 'Resource Timing logging', 2, function ( assert ) {
+	QUnit.test( 'Resource Timing logging', 3, function ( assert ) {
 		var data,
 			options = {
 				performance: { getEntriesByName: this.sandbox.stub().returns( [{
@@ -124,6 +101,6 @@
 
 		assert.strictEqual( data.ownLoadingTime, 111, 'ownLoadingTime is logged correctly' );
 		assert.strictEqual( data.fullLoadingTime, 10222, 'fullLoadingTime is logged correctly' );
-		assert.strictEqual( data.fetchDelay, 22, 'fetchDelay is logged correctly' );
+		assert.strictEqual( data.fetchDelay, 89, 'fetchDelay is logged correctly' );
 	} );
 } ( mediaWiki, jQuery ) );
