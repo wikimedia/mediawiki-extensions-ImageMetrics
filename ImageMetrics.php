@@ -30,7 +30,7 @@ $wgMessagesDirs['ImageMetrics'] = __DIR__ . '/i18n';
 
 $wgExtensionFunctions[] = function () {
 	global $wgEventLoggingSchemas;
-	$wgEventLoggingSchemas['ImageMetricsLoadingTime'] = 9673571;
+	$wgEventLoggingSchemas['ImageMetricsLoadingTime'] = 10078363;
 };
 
 

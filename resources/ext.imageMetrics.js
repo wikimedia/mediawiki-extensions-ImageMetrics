@@ -144,7 +144,7 @@
 		if ( timing ) {
 			data.ownLoadingTime = timing.duration;
 			data.fullLoadingTime = timing.responseEnd;
-			data.fetchDelay = timing.responseStart ? ( timing.responseStart - timing.startTime ) : null;
+			data.fetchDelay = timing.responseStart ? ( timing.responseStart - timing.startTime ) : undefined;
 		}
 	};
 
