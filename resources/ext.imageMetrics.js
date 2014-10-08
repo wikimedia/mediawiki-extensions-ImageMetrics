@@ -162,6 +162,10 @@
 		data.imageType = 'filepage-main'; // the only supported measurement type ATM
 		$file = $( '#file' ).find( 'img' ); // more efficient than '#file img'
 
+		if ( !$file.length ) {
+			return;
+		}
+
 		this.addMediaWikiData( data, $file );
 		this.addOnloadData( data );
 		this.addNavigationTimingData( data );
