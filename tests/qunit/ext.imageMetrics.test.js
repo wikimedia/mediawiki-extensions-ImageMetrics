@@ -103,4 +103,17 @@
 		assert.strictEqual( data.fullLoadingTime, 10222, 'fullLoadingTime is logged correctly' );
 		assert.strictEqual( data.fetchDelay, 89, 'fetchDelay is logged correctly' );
 	} );
+
+	QUnit.test( 'No image, no logging', 1, function ( assert ) {
+		var options = {
+				performance: { navigation: { type: 0 } },
+				config: { wgImageMetricsSamplingFactor: 1 }
+			},
+			imageMetrics = createImageMetrics( this.sandbox, options );
+		$( '#qunit-fixture' ).append( '<div id="file"></div>' );
+
+		imageMetrics.log();
+
+		assert.strictEqual( options.logEvent.called, false, 'logEvent was not called' );
+	} );
 } ( mediaWiki, jQuery ) );
