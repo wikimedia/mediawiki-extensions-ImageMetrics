@@ -28,9 +28,8 @@ $wgImageMetricsSamplingFactor = false;
 
 $wgMessagesDirs['ImageMetrics'] = __DIR__ . '/i18n';
 
-$wgExtensionFunctions[] = function () {
-	global $wgEventLoggingSchemas;
-	$wgEventLoggingSchemas['ImageMetricsLoadingTime'] = 10078363;
+$wgHooks['EventLoggingRegisterSchemas'][] = function( array &$schemas ) {
+	$schemas['ImageMetricsLoadingTime'] = 10078363;
 };
 
 
