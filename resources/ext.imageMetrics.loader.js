@@ -8,13 +8,19 @@
 ( function ( mw, $ ) {
 	'use strict';
 
+	var factor = mw.config.get( 'wgImageMetricsSamplingFactor', false ),
+		loggedinFactor = mw.config.get( 'wgImageMetricsLoggedinSamplingFactor', false );
+
+	if ( !mw.user.isAnon() && loggedinFactor ) {
+		factor = loggedinFactor;
+	}
+
 	/**
 	 * Makes a random decision (based on the sampling factor configuration setting) whether the current
 	 * request should be logged.
 	 * @return {boolean}
 	 */
 	function isInSample() {
-		var factor = mw.config.get( 'wgImageMetricsSamplingFactor', false );
 		if ( !$.isNumeric( factor ) || factor < 1 ) {
 			return false;
 		}
@@ -23,7 +29,7 @@
 
 	if ( isInSample() ) {
 		mw.loader.using( 'ext.imageMetrics', function () {
-			mw.ImageMetrics.install();
+			mw.ImageMetrics.install( factor );
 		} );
 	}
 } ( mediaWiki, jQuery ) );

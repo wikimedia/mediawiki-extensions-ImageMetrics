@@ -20,13 +20,16 @@
 	/**
 	 * @class ImageMetrics
 	 * @constructor
+	 * @param {number} samplingFactor sampling factor
 	 * @param {Object} performance window.performance
 	 * @param {Object} location window.location
 	 * @param {Object} mwConfig mw.config
 	 * @param {Object} geo window.Geo
 	 * @param {Object} eventLog mw.eventLog
 	 */
-	function ImageMetrics( performance, location, mwConfig, geo, eventLog ) {
+	function ImageMetrics( samplingFactor, performance, location, mwConfig, geo, eventLog ) {
+		this.samplingFactor = samplingFactor;
+
 		/** @property {Object} performance window.performance */
 		this.performance = performance;
 
@@ -46,18 +49,20 @@
 	/**
 	 * Factory function to take care of dependency injection.
 	 * @static
+	 * @param {number} samplingFactor sampling factor
 	 * @return {ImageMetrics}
 	 */
-	ImageMetrics.create = function() {
-		return new ImageMetrics( window.performance, window.location, mw.config, window.Geo, mw.eventLog );
+	ImageMetrics.create = function( samplingFactor ) {
+		return new ImageMetrics( samplingFactor, window.performance, window.location, mw.config, window.Geo, mw.eventLog );
 	};
 
 	/**
 	 * Installs the event handler which will perform the logging.
 	 * @static
+	 * @param {number} samplingFactor sampling factor
 	 */
-	ImageMetrics.install = function() {
-		var imageMetrics = ImageMetrics.create();
+	ImageMetrics.install = function( samplingFactor ) {
+		var imageMetrics = ImageMetrics.create( samplingFactor );
 
 		$( window ).load( function () {
 			imageMetrics.log();
@@ -155,7 +160,7 @@
 		var $file,
 			data = {};
 
-		data.samplingFactor = this.mwConfig.get( 'wgImageMetricsSamplingFactor' );
+		data.samplingFactor = this.samplingFactor;
 
 		data.isHttps = this.location.protocol === 'https:';
 

@@ -26,6 +26,9 @@ $wgExtensionCredits['other'][] = array(
 /** @var int|bool: If set, logs once per this many requests. False if unset. **/
 $wgImageMetricsSamplingFactor = false;
 
+/** @var int|bool: If set, logs once per this many requests for logged-in users. False if unset. **/
+$wgImageMetricsLoggedinSamplingFactor = false;
+
 $wgMessagesDirs['ImageMetrics'] = __DIR__ . '/i18n';
 
 $wgHooks['EventLoggingRegisterSchemas'][] = function( array &$schemas ) {
@@ -73,8 +76,9 @@ $wgHooks['BeforePageDisplay'][] = function ( &$out, &$skin ) {
  * @return bool
  */
 $wgHooks[ 'ResourceLoaderGetConfigVars' ][] = function ( &$vars ) {
-	global $wgImageMetricsSamplingFactor;
+	global $wgImageMetricsSamplingFactor, $wgImageMetricsLoggedinSamplingFactor;
 	$vars[ 'wgImageMetricsSamplingFactor' ] = $wgImageMetricsSamplingFactor;
+	$vars[ 'wgImageMetricsLoggedinSamplingFactor' ] = $wgImageMetricsLoggedinSamplingFactor;
 	return true;
 };
 

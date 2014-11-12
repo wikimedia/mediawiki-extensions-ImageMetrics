@@ -8,7 +8,7 @@
 			logEvent = sandbox.stub(),
 			config = new mw.Map( options.config || {} );
 
-		imageMetrics = new mw.ImageMetrics( options.performance || {}, options.location || {}, config,
+		imageMetrics = new mw.ImageMetrics( options.samplingFactor, options.performance || {}, options.location || {}, config,
 			options.geo || {}, { logEvent: logEvent } );
 
 		options.logEvent = logEvent;
@@ -23,7 +23,8 @@
 	QUnit.test( 'Minimal logging scenario', 12, function ( assert ) {
 		var data,
 			options = {
-				config: { wgImageMetricsSamplingFactor: 1 }
+				samplingFactor: 1,
+				config: {}
 			},
 			imageMetrics = createImageMetrics( this.sandbox, options );
 		$( '#qunit-fixture' ).append( '<div id="file"><img alt="Foo.jpg" /></div>' );
@@ -53,7 +54,7 @@
 	QUnit.test( 'Geo logging', 1, function ( assert ) {
 		var data,
 			options = {
-				config: { wgImageMetricsSamplingFactor: 1 },
+				samplingFactor: 1,
 				geo: { country: 'London' }
 			},
 			imageMetrics = createImageMetrics( this.sandbox, options );
@@ -71,7 +72,7 @@
 		var data,
 			options = {
 				performance: { navigation: { type: 0 } },
-				config: { wgImageMetricsSamplingFactor: 1 }
+				samplingFactor: 1
 			},
 			imageMetrics = createImageMetrics( this.sandbox, options );
 		$( '#qunit-fixture' ).append( '<div id="file"><img alt="Foo.jpg" /></div>' );
@@ -107,7 +108,7 @@
 	QUnit.test( 'No image, no logging', 1, function ( assert ) {
 		var options = {
 				performance: { navigation: { type: 0 } },
-				config: { wgImageMetricsSamplingFactor: 1 }
+				samplingFactor: 1
 			},
 			imageMetrics = createImageMetrics( this.sandbox, options );
 		$( '#qunit-fixture' ).append( '<div id="file"></div>' );
