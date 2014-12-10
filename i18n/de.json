@@ -1,8 +1,9 @@
 {
 	"@metadata": {
 		"authors": [
-			"Metalhead64"
+			"Metalhead64",
+			"Purodha"
 		]
 	},
-	"imagemetrics-desc": "Ergänzt verschiedene bildbezogene clientseitige Metriken"
+	"imagemetrics-desc": "Fügt dem Wiki verschiedene bildbezogene klientenseitige Metriken hinzu"
 }
