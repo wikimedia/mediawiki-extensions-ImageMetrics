@@ -22,7 +22,6 @@
 			file = $file.get( 0 );
 
 		if ( !file ) {
-			mw.log( 'ImageMetrics: file missing' );
 			return;
 		}
 

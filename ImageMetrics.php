@@ -29,10 +29,14 @@ $wgImageMetricsSamplingFactor = false;
 /** @var int|bool: If set, logs once per this many requests for logged-in users. False if unset. **/
 $wgImageMetricsLoggedinSamplingFactor = false;
 
+/** @var int|bool: If set, tests and logs CORS support once per this many requests. False if unset. **/
+$wgImageMetricsCorsSamplingFactor = false;
+
 $wgMessagesDirs['ImageMetrics'] = __DIR__ . '/i18n';
 
 $wgHooks['EventLoggingRegisterSchemas'][] = function( array &$schemas ) {
 	$schemas['ImageMetricsLoadingTime'] = 10078363;
+	$schemas['ImageMetricsCorsSupport'] = 10884476;
 };
 
 
@@ -41,12 +45,14 @@ $wgResourceModules += array(
 		'scripts'       => array(
 			'logger/Logger.js',
 			'logger/LoadingTimeLogger.js',
+			'logger/CorsLogger.js',
 		),
 		'localBasePath' => __DIR__ . '/resources',
 		'remoteExtPath' => 'ImageMetrics/resources',
 		'dependencies'  => array(
 			'oojs',
 			'schema.ImageMetricsLoadingTime',
+			'schema.ImageMetricsCorsSupport',
 		),
 		'targets'       => array( 'desktop', 'mobile' ),
 	),
@@ -71,7 +77,7 @@ $wgResourceModules += array(
  * @return bool
  */
 $wgHooks['BeforePageDisplay'][] = function ( &$out, &$skin ) {
-	if ( $out->getTitle()->inNamespace( NS_FILE ) && Action::getActionName( $out->getContext() ) === 'view' ) {
+	if ( Action::getActionName( $out->getContext() ) === 'view' ) {
 		$out->addModules( array( 'ext.imageMetrics.head', 'ext.imageMetrics.loader' ) );
 	}
 	return true;
@@ -82,11 +88,12 @@ $wgHooks['BeforePageDisplay'][] = function ( &$out, &$skin ) {
  * @return bool
  */
 $wgHooks[ 'ResourceLoaderGetConfigVars' ][] = function ( &$vars ) {
-	global $wgImageMetricsSamplingFactor, $wgImageMetricsLoggedinSamplingFactor;
+	global $wgImageMetricsSamplingFactor, $wgImageMetricsLoggedinSamplingFactor, $wgImageMetricsCorsSamplingFactor;
 	$vars[ 'wgImageMetrics' ] = array(
 		'samplingFactor' => array(
 			'image' => $wgImageMetricsSamplingFactor,
 			'imageLoggedin' => $wgImageMetricsLoggedinSamplingFactor,
+			'cors' => $wgImageMetricsCorsSamplingFactor,
 		),
 	);
 	return true;
@@ -101,6 +108,7 @@ $wgHooks['ResourceLoaderTestModules'][] = function ( array &$testModules, Resour
 	$testModules['qunit']['ext.imageMetrics.tests'] = array(
 		'scripts' => array(
 			'tests/qunit/logger/LoadingTimeLogger.test.js',
+			'tests/qunit/logger/CorsLogger.test.js',
 		),
 		'dependencies' => array(
 			'ext.imageMetrics',
