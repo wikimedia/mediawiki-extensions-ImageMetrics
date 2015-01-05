@@ -22,10 +22,12 @@
 
 	"predef": [
 		"window",
+		"document",
 		"Geo",
 		"QUnit",
 		"jQuery",
 		"mediaWiki",
-		"mediaWikiLoadStart"
+		"mediaWikiLoadStart",
+		"OO"
 	]
 }

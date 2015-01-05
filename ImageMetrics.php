@@ -38,21 +38,27 @@ $wgHooks['EventLoggingRegisterSchemas'][] = function( array &$schemas ) {
 
 $wgResourceModules += array(
 	'ext.imageMetrics' => array(
-		'scripts'       => 'ext.imageMetrics.js',
+		'scripts'       => array(
+			'logger/Logger.js',
+			'logger/LoadingTimeLogger.js',
+		),
 		'localBasePath' => __DIR__ . '/resources',
 		'remoteExtPath' => 'ImageMetrics/resources',
-		'dependencies'  => 'schema.ImageMetricsLoadingTime',
+		'dependencies'  => array(
+			'oojs',
+			'schema.ImageMetricsLoadingTime',
+		),
 		'targets'       => array( 'desktop', 'mobile' ),
 	),
 	'ext.imageMetrics.head' => array(
-		'scripts'       => 'ext.imageMetrics.head.js',
+		'scripts'       => 'head.js',
 		'localBasePath' => __DIR__ . '/resources',
 		'remoteExtPath' => 'ImageMetrics/resources',
 		'targets'       => array( 'desktop', 'mobile' ),
 	    'position'      => 'top',
 	),
 	'ext.imageMetrics.loader' => array(
-		'scripts'       => 'ext.imageMetrics.loader.js',
+		'scripts'       => 'loader.js',
 		'localBasePath' => __DIR__ . '/resources',
 		'remoteExtPath' => 'ImageMetrics/resources',
 		'targets'       => array( 'desktop', 'mobile' ),
@@ -77,8 +83,12 @@ $wgHooks['BeforePageDisplay'][] = function ( &$out, &$skin ) {
  */
 $wgHooks[ 'ResourceLoaderGetConfigVars' ][] = function ( &$vars ) {
 	global $wgImageMetricsSamplingFactor, $wgImageMetricsLoggedinSamplingFactor;
-	$vars[ 'wgImageMetricsSamplingFactor' ] = $wgImageMetricsSamplingFactor;
-	$vars[ 'wgImageMetricsLoggedinSamplingFactor' ] = $wgImageMetricsLoggedinSamplingFactor;
+	$vars[ 'wgImageMetrics' ] = array(
+		'samplingFactor' => array(
+			'image' => $wgImageMetricsSamplingFactor,
+			'imageLoggedin' => $wgImageMetricsLoggedinSamplingFactor,
+		),
+	);
 	return true;
 };
 
@@ -90,7 +100,7 @@ $wgHooks[ 'ResourceLoaderGetConfigVars' ][] = function ( &$vars ) {
 $wgHooks['ResourceLoaderTestModules'][] = function ( array &$testModules, ResourceLoader &$resourceLoader ) {
 	$testModules['qunit']['ext.imageMetrics.tests'] = array(
 		'scripts' => array(
-			'tests/qunit/ext.imageMetrics.test.js',
+			'tests/qunit/logger/LoadingTimeLogger.test.js',
 		),
 		'dependencies' => array(
 			'ext.imageMetrics',
