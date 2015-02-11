@@ -5,7 +5,7 @@
  * @licence GNU GPL v2 or later
  * @author Tisza Gergő <gtisza@wikimedia.org>
  */
-( function ( mw, $ ) {
+( function ( mw, $, oo ) {
 	'use strict';
 
 	/**
@@ -18,42 +18,40 @@
 	 */
 
 	/**
-	 * @class ImageMetrics
+	 * @class mw.imageMetrics.LoadingTimeLogger
+	 * @extends mw.imageMetrics.Logger
 	 * @constructor
 	 * @param {number} samplingFactor sampling factor
-	 * @param {Object} performance window.performance
 	 * @param {Object} location window.location
 	 * @param {Object} mwConfig mw.config
 	 * @param {Object} geo window.Geo
 	 * @param {Object} eventLog mw.eventLog
+	 * @param {Object} performance window.performance
 	 */
-	function ImageMetrics( samplingFactor, performance, location, mwConfig, geo, eventLog ) {
-		this.samplingFactor = samplingFactor;
+	function LoadingTimeLogger(
+		/* inherited arguments */
+		samplingFactor, location, mwConfig, geo, eventLog,
+		/* custom arguments */
+		performance
+	) {
+		LoadingTimeLogger.parent.call( this, samplingFactor, location, mwConfig, geo, eventLog );
 
 		/** @property {Object} performance window.performance */
 		this.performance = performance;
-
-		/** @property {Object} location window.location */
-		this.location = location;
-
-		/** @property {Object} mwConfig mw.config */
-		this.mwConfig = mwConfig;
-
-		/** @property {Object} geo window.Geo */
-		this.geo = geo;
-
-		/** @property {Object} eventLog mw.eventLog */
-		this.eventLog = eventLog;
 	}
+	oo.inheritClass( LoadingTimeLogger, mw.imageMetrics.Logger );
+
+	LoadingTimeLogger.prototype.schema = 'ImageMetricsLoadingTime';
 
 	/**
 	 * Factory function to take care of dependency injection.
 	 * @static
 	 * @param {number} samplingFactor sampling factor
-	 * @return {ImageMetrics}
+	 * @return {mw.imageMetrics.LoadingTimeLogger}
 	 */
-	ImageMetrics.create = function( samplingFactor ) {
-		return new ImageMetrics( samplingFactor, window.performance, window.location, mw.config, window.Geo, mw.eventLog );
+	LoadingTimeLogger.create = function( samplingFactor ) {
+		return new LoadingTimeLogger( samplingFactor, window.location, mw.config, window.Geo,
+			mw.eventLog, window.performance );
 	};
 
 	/**
@@ -61,52 +59,50 @@
 	 * @static
 	 * @param {number} samplingFactor sampling factor
 	 */
-	ImageMetrics.install = function( samplingFactor ) {
-		var imageMetrics = ImageMetrics.create( samplingFactor );
+	LoadingTimeLogger.install = function( samplingFactor ) {
+		var logger = LoadingTimeLogger.create( samplingFactor );
 
 		$( window ).load( function () {
-			imageMetrics.log();
+			logger.collect();
 		} );
+	};
+
+	/**
+	 * Collects image metrics data and logs it via EventLogging.
+	 */
+	LoadingTimeLogger.prototype.collect = function() {
+		var $file,
+			data = {};
+
+		data.imageType = 'filepage-main'; // the only supported measurement type ATM
+		$file = $( '#file' ).find( 'img' ); // more efficient than '#file img'
+
+		if ( !$file.length ) {
+			return;
+		}
+
+		this.addNavigationTimingData( data );
+		this.addResourceTimingData( data, $file );
+		this.addOtherData( data, $file );
+
+		this.log( data );
 	};
 
 	/**
 	 * @property {Object<integer, string>} navigationTypes map of NavigationTiming.type constants to
 	 *  human-readable strings
 	 */
-	ImageMetrics.prototype.navigationTypes = {
+	LoadingTimeLogger.prototype.navigationTypes = {
 		0: 'navigate',
 		1: 'reload',
 		2: 'back_forward'
 	};
 
 	/**
-	 * Adds information provided by MediaWiki.
-	 * @param {Object} data
-	 * @param {jQuery} $file jQuery object containing the img element
-	 */
-	ImageMetrics.prototype.addMediaWikiData = function ( data, $file ) {
-		if ( this.geo && typeof this.geo.country === 'string' ) {
-			data.country = this.geo.country;
-		}
-		if ( $file.attr( 'alt' ) ) {
-			data.fileType = $file.attr( 'alt' ).split( '.' ).pop();
-		}
-		data.isAnon = this.mwConfig.get( 'wgUserId' ) === null;
-	};
-
-	/**
-	 * Adds timing data from the image onload event.
-	 * @param {Object} data
-	 */
-	ImageMetrics.prototype.addOnloadData = function ( data ) {
-		data.fallbackFullLoadingTime = mw.imageMetricsLoadTime;
-	};
-
-	/**
 	 * Adds navigation type (reload, back etc) to the log data from the NavigationTiming API.
 	 * @param {Object} data
 	 */
-	ImageMetrics.prototype.addNavigationTimingData = function ( data ) {
+	LoadingTimeLogger.prototype.addNavigationTimingData = function ( data ) {
 		if ( this.performance.navigation && this.performance.navigation.type in this.navigationTypes ) {
 			data.navigationType = this.navigationTypes[this.performance.navigation.type];
 		}
@@ -118,7 +114,7 @@
 	 * @param {jQuery} $file jQuery object containing the img element
 	 * @return {PerformanceResourceTiming|boolean} timing object or false if not supported
 	 */
-	ImageMetrics.prototype.getResourceTiming = function ( $file ) {
+	LoadingTimeLogger.prototype.getResourceTiming = function ( $file ) {
 		var url, timing;
 
 		if ( !this.performance || !this.performance.getEntriesByName ) {
@@ -143,7 +139,7 @@
 	 * @param {Object} data
 	 * @param {jQuery} $file jQuery object containing the img element
 	 */
-	ImageMetrics.prototype.addResourceTimingData = function ( data, $file ) {
+	LoadingTimeLogger.prototype.addResourceTimingData = function ( data, $file ) {
 		var timing = this.getResourceTiming( $file );
 
 		if ( timing ) {
@@ -154,30 +150,16 @@
 	};
 
 	/**
-	 * Collects image metrics data and logs it via EventLogging.
+	 * Adds non-ResourceTiming/NavigationTimning-based information.
+	 * @param {Object} data
+	 * @param {jQuery} $file jQuery object containing the img element
 	 */
-	ImageMetrics.prototype.log = function() {
-		var $file,
-			data = {};
-
-		data.samplingFactor = this.samplingFactor;
-
-		data.isHttps = this.location.protocol === 'https:';
-
-		data.imageType = 'filepage-main'; // the only supported measurement type ATM
-		$file = $( '#file' ).find( 'img' ); // more efficient than '#file img'
-
-		if ( !$file.length ) {
-			return;
+	LoadingTimeLogger.prototype.addOtherData = function ( data, $file ) {
+		if ( $file.attr( 'alt' ) ) {
+			data.fileType = $file.attr( 'alt' ).split( '.' ).pop();
 		}
-
-		this.addMediaWikiData( data, $file );
-		this.addOnloadData( data );
-		this.addNavigationTimingData( data );
-		this.addResourceTimingData( data, $file );
-
-		this.eventLog.logEvent( 'ImageMetricsLoadingTime', data );
+		data.fallbackFullLoadingTime = mw.imageMetricsLoadTime;
 	};
 
-	mw.ImageMetrics = ImageMetrics;
-} ( mediaWiki, jQuery ) );
+	mw.imageMetrics.LoadingTimeLogger = LoadingTimeLogger;
+} ( mediaWiki, jQuery, OO ) );

@@ -1,23 +1,23 @@
 ( function ( mw, $ ) {
 	'use strict';
 
-	QUnit.module( 'ImageMetrics', QUnit.newMwEnvironment() );
+	QUnit.module( 'mw.imageMetrics.LoadingTimeLogger', QUnit.newMwEnvironment() );
 
-	function createImageMetrics( sandbox, options ) {
-		var imageMetrics,
+	function createLoadingTimeLogger( sandbox, options ) {
+		var logger,
 			logEvent = sandbox.stub(),
 			config = new mw.Map( options.config || {} );
 
-		imageMetrics = new mw.ImageMetrics( options.samplingFactor, options.performance || {}, options.location || {}, config,
-			options.geo || {}, { logEvent: logEvent } );
+		logger = new mw.imageMetrics.LoadingTimeLogger( options.samplingFactor, options.location || {}, config,
+			options.geo || {}, { logEvent: logEvent }, options.performance || {} );
 
 		options.logEvent = logEvent;
-		return imageMetrics;
+		return logger;
 	}
 
 	QUnit.test( 'Constructor sanity test', 1, function ( assert ) {
-		var imageMetrics = createImageMetrics( this.sandbox, {} );
-		assert.ok( imageMetrics, 'Object created' );
+		var logger = createLoadingTimeLogger( this.sandbox, {} );
+		assert.ok( logger, 'Object created' );
 	} );
 
 	QUnit.test( 'Minimal logging scenario', 12, function ( assert ) {
@@ -26,10 +26,10 @@
 				samplingFactor: 1,
 				config: {}
 			},
-			imageMetrics = createImageMetrics( this.sandbox, options );
+			logger = createLoadingTimeLogger( this.sandbox, options );
 		$( '#qunit-fixture' ).append( '<div id="file"><img alt="Foo.jpg" /></div>' );
 
-		imageMetrics.log();
+		logger.collect();
 		data = options.logEvent.firstCall.args[1];
 
 		assert.strictEqual( data.samplingFactor, 1, 'samplingFactor is logged correctly' );
@@ -45,8 +45,8 @@
 		assert.strictEqual( data.fetchDelay, undefined, 'fetchDelay is not logged when Resource Timing API is not available' );
 
 		options.config.wgUserId = 1;
-		imageMetrics = createImageMetrics( this.sandbox, options );
-		imageMetrics.log();
+		logger = createLoadingTimeLogger( this.sandbox, options );
+		logger.collect();
 		data = options.logEvent.firstCall.args[1];
 		assert.strictEqual( data.isAnon, false, 'isAnon is logged correctly' );
 	} );
@@ -57,10 +57,10 @@
 				samplingFactor: 1,
 				geo: { country: 'London' }
 			},
-			imageMetrics = createImageMetrics( this.sandbox, options );
+			logger = createLoadingTimeLogger( this.sandbox, options );
 		$( '#qunit-fixture' ).append( '<div id="file"><img alt="Foo.jpg" /></div>' );
 
-		imageMetrics.log();
+		logger.collect();
 		data = options.logEvent.firstCall.args[1];
 
 		assert.strictEqual( data.country, 'London', 'country is logged correctly' );
@@ -74,10 +74,10 @@
 				performance: { navigation: { type: 0 } },
 				samplingFactor: 1
 			},
-			imageMetrics = createImageMetrics( this.sandbox, options );
+			logger = createLoadingTimeLogger( this.sandbox, options );
 		$( '#qunit-fixture' ).append( '<div id="file"><img alt="Foo.jpg" /></div>' );
 
-		imageMetrics.log();
+		logger.collect();
 		data = options.logEvent.firstCall.args[1];
 
 		assert.strictEqual( data.navigationType, 'navigate', 'navigationType is logged correctly' );
@@ -94,10 +94,10 @@
 				}] ) },
 				config: { wgImageMetricsSamplingFactor: 1 }
 			},
-			imageMetrics = createImageMetrics( this.sandbox, options );
+			logger = createLoadingTimeLogger( this.sandbox, options );
 		$( '#qunit-fixture' ).append( '<div id="file"><img alt="Foo.jpg" /></div>' );
 
-		imageMetrics.log();
+		logger.collect();
 		data = options.logEvent.firstCall.args[1];
 
 		assert.strictEqual( data.ownLoadingTime, 111, 'ownLoadingTime is logged correctly' );
@@ -110,10 +110,10 @@
 				performance: { navigation: { type: 0 } },
 				samplingFactor: 1
 			},
-			imageMetrics = createImageMetrics( this.sandbox, options );
+			logger = createLoadingTimeLogger( this.sandbox, options );
 		$( '#qunit-fixture' ).append( '<div id="file"></div>' );
 
-		imageMetrics.log();
+		logger.collect();
 
 		assert.strictEqual( options.logEvent.called, false, 'logEvent was not called' );
 	} );

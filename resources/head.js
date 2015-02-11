@@ -1,5 +1,6 @@
 /**
  * JavaScript module for image-related metrics.
+ * Top-loaded on every request to measure timing of events which might happen before normal script load.
  * @see https://mediawiki.org/wiki/Extension:ImageMetrics
  *
  * @licence GNU GPL v2 or later
