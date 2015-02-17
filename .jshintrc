@@ -19,10 +19,9 @@
 	// extension-specific
 	"es3": true,
 	"strict": true,
+	"browser": true,
 
 	"predef": [
-		"window",
-		"document",
 		"Geo",
 		"QUnit",
 		"jQuery",

@@ -41,7 +41,7 @@
 		assert.strictEqual( data.navigationType, undefined, 'navigationType is not logged when Navigation Timing API is not available' );
 		assert.strictEqual( data.ownLoadingTime, undefined, 'ownLoadingTime is not logged when Resource Timing API is not available' );
 		assert.strictEqual( data.fullLoadingTime, undefined, 'fullLoadingTime is not logged when Resource Timing API is not available' );
-		assert.strictEqual( data.fallbackFullLoadingTime, undefined, 'fallbackFullLoadingTime is not logged when onload handler does not pass the value' );
+		assert.strictEqual( data.fallbackFullLoadingTime, null, 'fallbackFullLoadingTime is not logged when onload handler does not pass the value' );
 		assert.strictEqual( data.fetchDelay, undefined, 'fetchDelay is not logged when Resource Timing API is not available' );
 
 		options.config.wgUserId = 1;
