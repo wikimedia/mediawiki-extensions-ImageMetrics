@@ -46,7 +46,7 @@
 			mw.imageMetrics.LoadingTimeLogger.install( imageFactor );
 		}
 		if ( logCors ) {
-			mw.imageMetrics.CorsLogger.install( imageFactor );
+			mw.imageMetrics.CorsLogger.install( corsFactor );
 		}
 	} );
 } ( mediaWiki, jQuery ) );

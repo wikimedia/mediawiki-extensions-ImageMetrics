@@ -59,7 +59,7 @@
 			xdomainSupported: typeof XDomainRequest !== 'undefined',
 			imgAttributeSupported: 'crossOrigin' in document.createElement( 'img' ),
 			scriptAttributeSupported: 'crossOrigin' in document.createElement( 'script' ),
-			scriptLoaded: this.mwConfig.get( 'wgCorsLoggerTestSucceeded', false )
+			scriptLoaded: this.mwConfig.get( 'wgImageMetricsCorsTestSucceeded', false )
 		} );
 	};
 
@@ -84,7 +84,7 @@
 		// jQuery subverts script insertion into an AJAX + eval call which would break the whole point
 		script.onload = $.proxy( deferred, 'resolve' );
 		script.onerror = $.proxy( deferred, 'reject' );
-		$( 'head').get( 0).appendChild( script );
+		$( 'head' ).get( 0 ).appendChild( script );
 
 		return deferred.promise();
 	};
