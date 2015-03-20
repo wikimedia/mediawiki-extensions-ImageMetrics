@@ -30,7 +30,10 @@
 
 	if ( mw.config.get( 'wgCanonicalNamespace' ) !== 'File' ) {
 		imageFactor = 0;
-	} else if ( !mw.user.isAnon() && loggedinImageFactor ) {
+	} else if (
+		mw.config.get( 'wgUserName' ) !== null && // same as !mw.user.isAnon() - don't require mw.user just for this
+		loggedinImageFactor
+	) {
 		imageFactor = loggedinImageFactor;
 	}
 
