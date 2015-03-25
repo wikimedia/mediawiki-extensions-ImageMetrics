@@ -28,6 +28,7 @@
 			},
 			logger = createLoadingTimeLogger( this.sandbox, options );
 		$( '#qunit-fixture' ).append( '<div id="file"><img alt="Foo.jpg" /></div>' );
+		mw.imageMetricsLoadTime = null; // mock - no need to clean up, not used elsewhere
 
 		logger.collect();
 		data = options.logEvent.firstCall.args[1];
