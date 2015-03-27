@@ -38,7 +38,6 @@
 		return new CorsLogger( samplingFactor, window.location, mw.config, window.Geo, mw.eventLog );
 	};
 
-
 	/**
 	 * Sets up logging.
 	 * @static
@@ -47,7 +46,10 @@
 	CorsLogger.install = function ( samplingFactor ) {
 		var logger = CorsLogger.create( samplingFactor );
 
-		logger.loadScriptViaCors().always( $.proxy( logger, 'collect' ) );
+		$.when(
+			logger.loadScript( 'cors-test.js', true),
+			logger.loadScript( 'non-cors-test.js' )
+		).done( $.proxy( logger, 'collect' ) );
 	};
 
 	/**
@@ -59,31 +61,36 @@
 			xdomainSupported: typeof XDomainRequest !== 'undefined',
 			imgAttributeSupported: 'crossOrigin' in document.createElement( 'img' ),
 			scriptAttributeSupported: 'crossOrigin' in document.createElement( 'script' ),
-			scriptLoaded: this.mwConfig.get( 'wgImageMetricsCorsTestSucceeded', false )
+			scriptLoaded: this.mwConfig.get( 'wgImageMetricsCorsTestSucceeded', false ),
+			sanityCheck: this.mwConfig.get( 'wgImageMetricsNonCorsTestSucceeded', false )
 		} );
 	};
 
 	/**
-	 * Loads cors-test.js with a crossorigin="anonymous" <script> attribute.
+	 * Loads a resource.
+	 * @param {string} filename Name of the file
+	 * @param {bool} [crossorigin] Use a crossorigin="anonymous" <script> attribute.
 	 * @return {jQuery.Deferred}
 	 */
-	CorsLogger.prototype.loadScriptViaCors = function () {
+	CorsLogger.prototype.loadScript = function ( filename, crossorigin ) {
 		var script,
 			deferred = $.Deferred();
 
 		script = $( '<script>' )
 			.attr( {
 				type: 'text/javascript',
-				crossorigin: 'anonymous',
+				crossorigin: crossorigin ? 'anonymous' : undefined,
 				// this will not work if wgExtensionAssetsPath is a relative URL (which is the
 				// default) but there is no need for CORS loading of assets in that case anyway
-				src: this.mwConfig.get( 'wgExtensionAssetsPath' ) + '/ImageMetrics/resources/cors-test.js'
+				src: this.mwConfig.get( 'wgExtensionAssetsPath' ) + '/ImageMetrics/resources/' + filename
 			} )
 			.get( 0 );
 
-		// jQuery subverts script insertion into an AJAX + eval call which would break the whole point
+		// jQuery subverts script insertion into an AJAX + eval call which would break the whole point, so
+		// we use native AJAX. Also, don't trust success/error handlers, some browsers treat them in weird
+		// ways for CORS calls; we will check directly whether the script has executed.
 		script.onload = $.proxy( deferred, 'resolve' );
-		script.onerror = $.proxy( deferred, 'reject' );
+		script.onerror = $.proxy( deferred, 'resolve' );
 		$( 'head' ).get( 0 ).appendChild( script );
 
 		return deferred.promise();

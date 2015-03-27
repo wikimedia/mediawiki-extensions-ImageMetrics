@@ -36,7 +36,7 @@ $wgMessagesDirs['ImageMetrics'] = __DIR__ . '/i18n';
 
 $wgHooks['EventLoggingRegisterSchemas'][] = function( array &$schemas ) {
 	$schemas['ImageMetricsLoadingTime'] = 10078363;
-	$schemas['ImageMetricsCorsSupport'] = 10884476;
+	$schemas['ImageMetricsCorsSupport'] = 11686678;
 };
 
 

@@ -20,7 +20,7 @@
 		assert.ok( logger, 'Object created' );
 	} );
 
-	QUnit.test( 'Minimal logging scenario', 10, function ( assert ) {
+	QUnit.test( 'Minimal logging scenario', 11, function ( assert ) {
 		var data,
 			options = {
 				samplingFactor: 1,
@@ -41,6 +41,7 @@
 		assert.ok( 'imgAttributeSupported' in data );
 		assert.ok( 'scriptAttributeSupported' in data );
 		assert.ok( 'scriptLoaded' in data );
+		assert.ok( 'sanityCheck' in data );
 
 		options.config.wgUserId = 1;
 		logger = createCorsLogger( this.sandbox, options );
@@ -49,9 +50,9 @@
 		assert.strictEqual( data.isAnon, false, 'isAnon is logged correctly' );
 	} );
 
-	QUnit.test( 'loadScriptViaCors() sanity test', 1, function ( assert ) {
+	QUnit.test( 'loadScript() sanity test', 1, function ( assert ) {
 		var logger = createCorsLogger( this.sandbox, {} ),
-			promise = logger.loadScriptViaCors();
+			promise = logger.loadScript( 'foo.js' );
 		assert.ok( 'then' in promise, 'loadScriptViaCors() runs successfully and returns a promise' );
 	} );
 } ( mediaWiki, jQuery ) );
