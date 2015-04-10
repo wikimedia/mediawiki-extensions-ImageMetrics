@@ -44,12 +44,23 @@
 	 * @param {number} samplingFactor sampling factor
 	 */
 	CorsLogger.install = function ( samplingFactor ) {
-		var logger = CorsLogger.create( samplingFactor );
+		var promise,
+			logger = CorsLogger.create( samplingFactor );
 
-		$.when(
-			logger.loadScript( 'cors-test.js', true),
-			logger.loadScript( 'non-cors-test.js' )
-		).done( $.proxy( logger, 'collect' ) );
+		// randomize which request is fired first
+		if ( Math.random() >= 0.5 ) {
+			promise = $.when(
+				logger.loadScript( 'cors-test.js', true),
+				logger.loadScript( 'non-cors-test.js' )
+			);
+		} else {
+			promise = $.when(
+				logger.loadScript( 'non-cors-test.js' ),
+				logger.loadScript( 'cors-test.js', true)
+			);
+		}
+
+		promise.done( $.proxy( logger, 'collect' ) );
 	};
 
 	/**
@@ -82,7 +93,9 @@
 				crossorigin: crossorigin ? 'anonymous' : undefined,
 				// this will not work if wgExtensionAssetsPath is a relative URL (which is the
 				// default) but there is no need for CORS loading of assets in that case anyway
-				src: this.mwConfig.get( 'wgExtensionAssetsPath' ) + '/ImageMetrics/resources/' + filename
+				src: this.mwConfig.get( 'wgExtensionAssetsPath' ) + '/ImageMetrics/resources/' + filename +
+					// add cache buster to avoid bias if CORS and normal requests are cached differently
+					'?_=' + Math.random()
 			} )
 			.get( 0 );
 
