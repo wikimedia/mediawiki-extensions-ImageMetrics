@@ -1,0 +1,9 @@
+{
+  "scripts": {
+    "test": "jshint ."
+  },
+  "devDependencies": {
+    "jshint": "2.6.3"
+  }
+}
+
