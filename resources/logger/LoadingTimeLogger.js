@@ -158,7 +158,9 @@
 		if ( $file.attr( 'alt' ) ) {
 			data.fileType = $file.attr( 'alt' ).split( '.' ).pop();
 		}
-		data.fallbackFullLoadingTime = mw.imageMetricsLoadTime;
+		if ( typeof mw.imageMetricsLoadTime === 'number' ) {
+			data.fallbackFullLoadingTime = mw.imageMetricsLoadTime;
+		}
 	};
 
 	mw.imageMetrics.LoadingTimeLogger = LoadingTimeLogger;
