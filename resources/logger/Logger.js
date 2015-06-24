@@ -46,14 +46,14 @@
 	 * @param {number} samplingFactor sampling factor
 	 * @return {mw.imageMetrics.Logger}
 	 */
-	Logger.create = function( samplingFactor ) {
+	Logger.create = function ( samplingFactor ) {
 		return new Logger( samplingFactor, window.location, mw.config, window.Geo, mw.eventLog );
 	};
 
 	/**
 	 * Collects image metrics data and logs it via EventLogging.
 	 */
-	Logger.prototype.log = function( data ) {
+	Logger.prototype.log = function ( data ) {
 		data = $.extend( {}, data );
 		data.samplingFactor = this.samplingFactor;
 		data.isHttps = this.location.protocol === 'https:';
@@ -67,4 +67,4 @@
 
 	mw.imageMetrics = {};
 	mw.imageMetrics.Logger = Logger;
-} ( mediaWiki, jQuery ) );
+}( mediaWiki, jQuery ) );

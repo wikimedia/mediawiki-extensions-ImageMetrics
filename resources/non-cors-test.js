@@ -5,4 +5,4 @@
 ( function ( mw ) {
 	'use strict';
 	mw.config.set( 'wgImageMetricsNonCorsTestSucceeded', true );
-} ( mediaWiki ) );
+}( mediaWiki ) );

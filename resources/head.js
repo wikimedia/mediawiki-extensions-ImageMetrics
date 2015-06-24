@@ -18,7 +18,7 @@
 	mw.imageMetricsLoadTime = null;
 
 	$( function () {
-		var $file = $( '#file' ).find( 'img'),
+		var $file = $( '#file' ).find( 'img' ),
 			file = $file.get( 0 );
 
 		if ( !file ) {
@@ -38,4 +38,4 @@
 			}
 		} );
 	} );
-} ( mediaWiki, jQuery ) );
+}( mediaWiki, jQuery ) );

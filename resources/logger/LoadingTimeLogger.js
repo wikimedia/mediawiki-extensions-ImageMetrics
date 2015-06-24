@@ -49,7 +49,7 @@
 	 * @param {number} samplingFactor sampling factor
 	 * @return {mw.imageMetrics.LoadingTimeLogger}
 	 */
-	LoadingTimeLogger.create = function( samplingFactor ) {
+	LoadingTimeLogger.create = function ( samplingFactor ) {
 		return new LoadingTimeLogger( samplingFactor, window.location, mw.config, window.Geo,
 			mw.eventLog, window.performance );
 	};
@@ -59,7 +59,7 @@
 	 * @static
 	 * @param {number} samplingFactor sampling factor
 	 */
-	LoadingTimeLogger.install = function( samplingFactor ) {
+	LoadingTimeLogger.install = function ( samplingFactor ) {
 		var logger = LoadingTimeLogger.create( samplingFactor );
 
 		$( window ).load( function () {
@@ -70,7 +70,7 @@
 	/**
 	 * Collects image metrics data and logs it via EventLogging.
 	 */
-	LoadingTimeLogger.prototype.collect = function() {
+	LoadingTimeLogger.prototype.collect = function () {
 		var $file,
 			data = {};
 
@@ -164,4 +164,4 @@
 	};
 
 	mw.imageMetrics.LoadingTimeLogger = LoadingTimeLogger;
-} ( mediaWiki, jQuery, OO ) );
+}( mediaWiki, jQuery, OO ) );

@@ -52,4 +52,4 @@
 			mw.imageMetrics.CorsLogger.install( corsFactor );
 		}
 	} );
-} ( mediaWiki, jQuery ) );
+}( mediaWiki, jQuery ) );

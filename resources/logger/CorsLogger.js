@@ -34,7 +34,7 @@
 	 * @param {number} samplingFactor sampling factor
 	 * @return {mw.imageMetrics.CorsLogger}
 	 */
-	CorsLogger.create = function( samplingFactor ) {
+	CorsLogger.create = function ( samplingFactor ) {
 		return new CorsLogger( samplingFactor, window.location, mw.config, window.Geo, mw.eventLog );
 	};
 
@@ -50,13 +50,13 @@
 		// randomize which request is fired first
 		if ( Math.random() >= 0.5 ) {
 			promise = $.when(
-				logger.loadScript( 'cors-test.js', true),
+				logger.loadScript( 'cors-test.js', true ),
 				logger.loadScript( 'non-cors-test.js' )
 			);
 		} else {
 			promise = $.when(
 				logger.loadScript( 'non-cors-test.js' ),
-				logger.loadScript( 'cors-test.js', true)
+				logger.loadScript( 'cors-test.js', true )
 			);
 		}
 
@@ -110,4 +110,4 @@
 	};
 
 	mw.imageMetrics.CorsLogger = CorsLogger;
-} ( mediaWiki, jQuery, OO ) );
+}( mediaWiki, jQuery, OO ) );
