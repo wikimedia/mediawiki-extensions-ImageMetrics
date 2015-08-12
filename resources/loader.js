@@ -9,11 +9,10 @@
 ( function ( mw, $ ) {
 	'use strict';
 
-	var logImage, logCors,
+	var logImage,
 		config = mw.config.get( 'wgImageMetrics', { samplingFactor: {} } ),
 		imageFactor = config.samplingFactor.image,
-		loggedinImageFactor = config.samplingFactor.imageLoggedin,
-		corsFactor = config.samplingFactor.cors;
+		loggedinImageFactor = config.samplingFactor.imageLoggedin;
 
 	/**
 	 * Makes a random decision (based on samplingRatio) whether an event should be logged.
@@ -38,18 +37,14 @@
 	}
 
 	logImage = isInSample( imageFactor );
-	logCors = isInSample( corsFactor );
 
-	if ( !logImage && !logCors ) {
+	if ( !logImage ) {
 		return;
 	}
 
 	mw.loader.using( 'ext.imageMetrics', function () {
 		if ( logImage ) {
 			mw.imageMetrics.LoadingTimeLogger.install( imageFactor );
-		}
-		if ( logCors ) {
-			mw.imageMetrics.CorsLogger.install( corsFactor );
 		}
 	} );
 }( mediaWiki, jQuery ) );
