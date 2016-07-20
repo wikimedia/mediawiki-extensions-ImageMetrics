@@ -1,0 +1,65 @@
+{
+	"name": "ImageMetrics",
+	"version": "0.1.0",
+	"author": [
+		"Tisza Gergő"
+	],
+	"url": "https://www.mediawiki.org/wiki/Extension:ImageMetrics",
+	"descriptionmsg": "imagemetrics-desc",
+	"license-name": "GPL-2.0+",
+	"type": "other",
+	"MessagesDirs": {
+		"ImageMetrics": [
+			"i18n"
+		]
+	},
+	"AutoloadClasses": {
+		"ImageMetricHooks": "ImageMetrics.hooks.php"
+	},
+	"ResourceModules": {
+		"ext.imageMetrics": {
+			"scripts": [
+				"logger/Logger.js",
+				"logger/LoadingTimeLogger.js"
+			],
+			"dependencies": [
+				"oojs",
+				"schema.ImageMetricsLoadingTime"
+			],
+			"targets": [
+				"desktop",
+				"mobile"
+			]
+		},
+		"ext.imageMetrics.head": {
+			"scripts": "head.js",
+			"targets": [
+				"desktop",
+				"mobile"
+			],
+			"position": "top"
+		},
+		"ext.imageMetrics.loader": {
+			"scripts": "loader.js",
+			"targets": [
+				"desktop",
+				"mobile"
+			]
+		}
+	},
+	"ResourceFileModulePaths": {
+		"localBasePath": "resources",
+		"remoteExtPath": "ImageMetrics/resources"
+	},
+	"Hooks": {
+		"EventLoggingRegisterSchemas": "ImageMetricHooks::onEventLoggingRegisterSchemas",
+		"BeforePageDisplay": "ImageMetricHooks::onBeforePageDisplay",
+		"ResourceLoaderGetConfigVars": "ImageMetricHooks::onResourceLoaderGetConfigVars",
+		"ResourceLoaderTestModules": "ImageMetricHooks::onResourceLoaderTestModules"
+	},
+	"config": {
+		"ImageMetricsSamplingFactor": false,
+		"ImageMetricsLoggedinSamplingFactor": false
+	},
+	"manifest_version": 1
+}
