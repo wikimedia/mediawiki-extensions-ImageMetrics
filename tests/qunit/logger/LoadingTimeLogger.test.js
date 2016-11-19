@@ -4,16 +4,11 @@
 	QUnit.module( 'mw.imageMetrics.LoadingTimeLogger', QUnit.newMwEnvironment() );
 
 	function createLoadingTimeLogger( sandbox, options ) {
-		var i, logger,
+		var logger,
 			logEvent = sandbox.stub(),
 			config = new mw.Map( false );
 
-		if ( options.config ) {
-			for ( i in options.config ) {
-				config.set( i, options.config[i] );
-			}
-		}
-
+		config.set( options.config || {} );
 		logger = new mw.imageMetrics.LoadingTimeLogger( options.samplingFactor, options.location || {}, config,
 			options.geo || {}, { logEvent: logEvent }, options.performance || {} );
 
