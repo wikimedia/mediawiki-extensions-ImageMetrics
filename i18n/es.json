@@ -1,8 +1,9 @@
 {
 	"@metadata": {
 		"authors": [
-			"Lemondoge"
+			"Lemondoge",
+			"Fitoschido"
 		]
 	},
-	"imagemetrics-desc": "Agrega varias relacionadas con la imagen del lado del cliente métricas"
+	"imagemetrics-desc": "Añade diversas métricas relacionadas con las imágenes del lado cliente"
 }
