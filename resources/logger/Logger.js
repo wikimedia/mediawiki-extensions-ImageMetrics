@@ -1,4 +1,4 @@
-/**
+/*!
  * JavaScript module for image-related metrics.
  * @see https://mediawiki.org/wiki/Extension:Logger
  *
@@ -10,6 +10,7 @@
 
 	/**
 	 * Abstract parent class for metrics tasks.
+	 *
 	 * @class mw.imageMetrics.Logger
 	 * @constructor
 	 * @param {number} samplingFactor sampling factor
@@ -42,12 +43,16 @@
 
 	/**
 	 * Factory function to take care of dependency injection.
+	 *
 	 * @static
 	 * @param {number} samplingFactor sampling factor
 	 * @return {mw.imageMetrics.Logger}
 	 */
 	Logger.create = function ( samplingFactor ) {
+		// https://github.com/jscs-dev/jscs-jsdoc/issues/31
+		// jscs:disable
 		return new Logger( samplingFactor, window.location, mw.config, window.Geo, mw.eventLog );
+		// jscs:enable
 	};
 
 	/**

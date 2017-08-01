@@ -1,4 +1,4 @@
-/**
+/*!
  * JavaScript module for image-related metrics.
  * This module will be loaded on every request to perform sampling and load the real module if needed.
  * @see https://mediawiki.org/wiki/Extension:ImageMetrics
@@ -17,6 +17,7 @@
 	/**
 	 * Makes a random decision (based on samplingRatio) whether an event should be logged.
 	 * Returns true with 1/samplingRatio probability, or false if samplingRatio  is not a number or smaller than 1.
+	 *
 	 * @param {number|boolean} samplingRatio
 	 * @return {boolean}
 	 */

@@ -1,4 +1,4 @@
-/**
+/*!
  * JavaScript module for image-related metrics.
  * @see https://mediawiki.org/wiki/Extension:ImageMetrics
  *
@@ -45,17 +45,22 @@
 
 	/**
 	 * Factory function to take care of dependency injection.
+	 *
 	 * @static
 	 * @param {number} samplingFactor sampling factor
 	 * @return {mw.imageMetrics.LoadingTimeLogger}
 	 */
 	LoadingTimeLogger.create = function ( samplingFactor ) {
+		// https://github.com/jscs-dev/jscs-jsdoc/issues/31
+		// jscs:disable
 		return new LoadingTimeLogger( samplingFactor, window.location, mw.config, window.Geo,
 			mw.eventLog, window.performance );
+		// jscs:enable
 	};
 
 	/**
 	 * Installs the event handler which will perform the logging.
+	 *
 	 * @static
 	 * @param {number} samplingFactor sampling factor
 	 */
@@ -100,17 +105,19 @@
 
 	/**
 	 * Adds navigation type (reload, back etc) to the log data from the NavigationTiming API.
+	 *
 	 * @param {Object} data
 	 */
 	LoadingTimeLogger.prototype.addNavigationTimingData = function ( data ) {
 		if ( this.performance.navigation && this.performance.navigation.type in this.navigationTypes ) {
-			data.navigationType = this.navigationTypes[this.performance.navigation.type];
+			data.navigationType = this.navigationTypes[ this.performance.navigation.type ];
 		}
 	};
 
 	/**
 	 * Returns timing data about the given file.
 	 * Requires ResourceTiming support - http://caniuse.com/resource-timing
+	 *
 	 * @param {jQuery} $file jQuery object containing the img element
 	 * @return {PerformanceResourceTiming|boolean} timing object or false if not supported
 	 */
@@ -122,7 +129,7 @@
 		}
 
 		url = $file.prop( 'src' ); // attr() might be relative, prop() is always absolute
-		timing = this.performance.getEntriesByName( url )[0];
+		timing = this.performance.getEntriesByName( url )[ 0 ];
 		if ( !timing ) {
 			return false;
 		}
@@ -136,6 +143,7 @@
 	 * - ownLoadingTime: net time it took the browser to load the image (PerformanceResourceTiming.duration)
 	 * - fullLoadingTime: total time from opening the page to finishing the image load  (PerformanceResourceTiming.responseEnd)
 	 * - fetchDelay: time between requesting the image and receiving the first byte (might be missing)
+	 *
 	 * @param {Object} data
 	 * @param {jQuery} $file jQuery object containing the img element
 	 */
@@ -151,6 +159,7 @@
 
 	/**
 	 * Adds non-ResourceTiming/NavigationTimning-based information.
+	 *
 	 * @param {Object} data
 	 * @param {jQuery} $file jQuery object containing the img element
 	 */
