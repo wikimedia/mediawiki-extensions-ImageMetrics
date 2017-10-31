@@ -26,7 +26,6 @@
 		"QUnit",
 		"jQuery",
 		"mediaWiki",
-		"mediaWikiLoadStart",
 		"OO"
 	]
 }

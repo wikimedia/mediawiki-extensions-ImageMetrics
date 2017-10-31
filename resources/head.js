@@ -33,10 +33,8 @@
 			return;
 		}
 
-		$file.load( function () {
-			if ( window.mediaWikiLoadStart ) {
-				mw.imageMetricsLoadTime = mw.now() - window.mediaWikiLoadStart;
-			}
+		$file.on( 'load', function () {
+			mw.imageMetricsLoadTime = mw.now();
 		} );
 	} );
 }( mediaWiki, jQuery ) );

@@ -164,11 +164,12 @@
 	 * @param {jQuery} $file jQuery object containing the img element
 	 */
 	LoadingTimeLogger.prototype.addOtherData = function ( data, $file ) {
+		var navStart = this.performance && this.performance.timing && this.performance.timing.navigationStart;
 		if ( $file.attr( 'alt' ) ) {
 			data.fileType = $file.attr( 'alt' ).split( '.' ).pop();
 		}
-		if ( typeof mw.imageMetricsLoadTime === 'number' ) {
-			data.fallbackFullLoadingTime = mw.imageMetricsLoadTime;
+		if ( typeof mw.imageMetricsLoadTime === 'number' && navStart ) {
+			data.fallbackFullLoadingTime = mw.imageMetricsLoadTime === 0 ? 0 : imageMetricsLoadTime - navStart;
 		}
 	};
 
