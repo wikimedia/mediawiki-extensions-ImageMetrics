@@ -16,12 +16,12 @@
 		return logger;
 	}
 
-	QUnit.test( 'Constructor sanity test', 1, function ( assert ) {
+	QUnit.test( 'Constructor sanity test', function ( assert ) {
 		var logger = createLoadingTimeLogger( this.sandbox, {} );
-		assert.ok( logger, 'Object created' );
+		assert.equal( typeof logger, 'object', 'Object created' );
 	} );
 
-	QUnit.test( 'Minimal logging scenario', 12, function ( assert ) {
+	QUnit.test( 'Minimal logging scenario', function ( assert ) {
 		var data,
 			options = {
 				samplingFactor: 1,
@@ -53,7 +53,7 @@
 		assert.strictEqual( data.isAnon, false, 'isAnon is logged correctly' );
 	} );
 
-	QUnit.test( 'Geo logging', 1, function ( assert ) {
+	QUnit.test( 'Geo logging', function ( assert ) {
 		var data,
 			options = {
 				samplingFactor: 1,
@@ -70,7 +70,7 @@
 
 	// no test for onload time logging - it is set up in a head script, difficult to simulate
 
-	QUnit.test( 'Navigation Timing logging', 1, function ( assert ) {
+	QUnit.test( 'Navigation Timing logging', function ( assert ) {
 		var data,
 			options = {
 				performance: { navigation: { type: 0 } },
@@ -85,7 +85,7 @@
 		assert.strictEqual( data.navigationType, 'navigate', 'navigationType is logged correctly' );
 	} );
 
-	QUnit.test( 'Resource Timing logging', 3, function ( assert ) {
+	QUnit.test( 'Resource Timing logging', function ( assert ) {
 		var data,
 			options = {
 				performance: { getEntriesByName: this.sandbox.stub().returns( [{
@@ -107,7 +107,7 @@
 		assert.strictEqual( data.fetchDelay, 89, 'fetchDelay is logged correctly' );
 	} );
 
-	QUnit.test( 'No image, no logging', 1, function ( assert ) {
+	QUnit.test( 'No image, no logging', function ( assert ) {
 		var options = {
 				performance: { navigation: { type: 0 } },
 				samplingFactor: 1
