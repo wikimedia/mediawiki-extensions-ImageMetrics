@@ -23,7 +23,7 @@ class ImageMetricHooks {
 	 */
 	public static function onBeforePageDisplay( &$out, &$skin ) {
 		if ( $out->getTitle()->inNamespace( NS_FILE ) && Action::getActionName( $out->getContext() ) === 'view' ) {
-			$out->addModules( array( 'ext.imageMetrics.head', 'ext.imageMetrics.loader' ) );
+			$out->addModules( [ 'ext.imageMetrics.head', 'ext.imageMetrics.loader' ] );
 		}
 		return true;
 	}
@@ -34,12 +34,12 @@ class ImageMetricHooks {
 	 */
 	public static function onResourceLoaderGetConfigVars( &$vars ) {
 		global $wgImageMetricsSamplingFactor, $wgImageMetricsLoggedinSamplingFactor;
-		$vars[ 'wgImageMetrics' ] = array(
-			'samplingFactor' => array(
+		$vars[ 'wgImageMetrics' ] = [
+			'samplingFactor' => [
 				'image' => $wgImageMetricsSamplingFactor,
 				'imageLoggedin' => $wgImageMetricsLoggedinSamplingFactor,
-			),
-		);
+			],
+		];
 		return true;
 	}
 
@@ -49,17 +49,16 @@ class ImageMetricHooks {
 	 * @return bool
 	 */
 	public static function onResourceLoaderTestModules( array &$testModules, ResourceLoader &$resourceLoader ) {
-		$testModules['qunit']['ext.imageMetrics.tests'] = array(
-			'scripts' => array(
+		$testModules['qunit']['ext.imageMetrics.tests'] = [
+			'scripts' => [
 				'tests/qunit/logger/LoadingTimeLogger.test.js',
-			),
-			'dependencies' => array(
+			],
+			'dependencies' => [
 				'ext.imageMetrics',
-			),
+			],
 			'localBasePath' => __DIR__,
 			'remoteExtPath' => 'ImageMetrics',
-			);
+			];
 		return true;
 	}
 }
-
