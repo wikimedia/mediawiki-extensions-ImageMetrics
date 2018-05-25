@@ -7,7 +7,7 @@
  *
  * @author Tisza Gergő <gtisza@wikimedia.org>
  *
- * @license GPL v2 or later
+ * @license GPL-2.0-or-later
  * @version 0.1.0
  */
 
