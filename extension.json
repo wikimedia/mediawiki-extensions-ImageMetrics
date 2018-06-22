@@ -51,8 +51,10 @@
 		"localBasePath": "resources",
 		"remoteExtPath": "ImageMetrics/resources"
 	},
+	"EventLoggingSchemas": {
+		"ImageMetricsLoadingTime": 10078363
+	},
 	"Hooks": {
-		"EventLoggingRegisterSchemas": "ImageMetricHooks::onEventLoggingRegisterSchemas",
 		"BeforePageDisplay": "ImageMetricHooks::onBeforePageDisplay",
 		"ResourceLoaderGetConfigVars": "ImageMetricHooks::onResourceLoaderGetConfigVars",
 		"ResourceLoaderTestModules": "ImageMetricHooks::onResourceLoaderTestModules"

@@ -12,9 +12,6 @@
  */
 
 class ImageMetricHooks {
-	public static function onEventLoggingRegisterSchemas( array &$schemas ) {
-		$schemas['ImageMetricsLoadingTime'] = 10078363;
-	}
 
 	/**
 	 * @param OutputPage $out
