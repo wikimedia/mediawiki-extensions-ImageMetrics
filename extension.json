@@ -8,6 +8,11 @@
 	"descriptionmsg": "imagemetrics-desc",
 	"license-name": "GPL-2.0-or-later",
 	"type": "other",
+	"requires": {
+		"extensions": {
+			"EventLogging": "*"
+		}
+	},
 	"MessagesDirs": {
 		"ImageMetrics": [
 			"i18n"
