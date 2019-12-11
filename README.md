@@ -2,13 +2,13 @@ ImageMetrics
 ------------
 
 ImageMetrics is a MediaWiki extension for logging various image-related
-frontend metrics such as loading speed. It requires MediaWiki 1.23+.
+frontend metrics such as loading speed. It requires MediaWiki 1.25+.
 
 Sample configuration:
 
 ```
-require_once( "$IP/extensions/EventLogging/EventLogging.php" ); // dependency
-require_once( "$IP/extensions/ImageMetrics/ImageMetrics.php" );
+wfLoadExtension( 'EventLogging' ); // dependency
+wfLoadExtension( 'ImageMetrics' );
 $wgImageMetricsSamplingFactor = 1000; // log 1:1000 requests
 ```
 
