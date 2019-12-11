@@ -19,7 +19,7 @@
 		]
 	},
 	"AutoloadClasses": {
-		"ImageMetricHooks": "ImageMetrics.hooks.php"
+		"ImageMetricsHooks": "includes/ImageMetricsHooks.php"
 	},
 	"ResourceModules": {
 		"ext.imageMetrics": {
@@ -59,9 +59,9 @@
 		"ImageMetricsLoadingTime": 10078363
 	},
 	"Hooks": {
-		"BeforePageDisplay": "ImageMetricHooks::onBeforePageDisplay",
-		"ResourceLoaderGetConfigVars": "ImageMetricHooks::onResourceLoaderGetConfigVars",
-		"ResourceLoaderTestModules": "ImageMetricHooks::onResourceLoaderTestModules"
+		"BeforePageDisplay": "ImageMetricsHooks::onBeforePageDisplay",
+		"ResourceLoaderGetConfigVars": "ImageMetricsHooks::onResourceLoaderGetConfigVars",
+		"ResourceLoaderTestModules": "ImageMetricsHooks::onResourceLoaderTestModules"
 	},
 	"config": {
 		"ImageMetricsSamplingFactor": false,

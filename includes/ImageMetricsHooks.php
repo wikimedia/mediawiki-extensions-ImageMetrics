@@ -11,7 +11,7 @@
  * @version 0.1.0
  */
 
-class ImageMetricHooks {
+class ImageMetricsHooks {
 
 	/**
 	 * @param OutputPage $out
@@ -53,7 +53,7 @@ class ImageMetricHooks {
 			'dependencies' => [
 				'ext.imageMetrics',
 			],
-			'localBasePath' => __DIR__,
+			'localBasePath' => dirname( __DIR__ ),
 			'remoteExtPath' => 'ImageMetrics',
 			];
 		return true;
